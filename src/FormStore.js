@@ -429,7 +429,11 @@ class FormStore {
           updates = Object.assign({}, store.data);
         } else {
           updates = store.dataChanges.toJS();
-
+          const tempUpdates = {};
+          for (const [key, value] of updates.entries()) {
+            tempUpdates[key] = value;
+          }
+          updates = tempUpdates;
           if (Object.keys(updates).length === 0) {
             store.options.log(`[${store.options.name}] No changes to save.`);
             return false;
@@ -466,7 +470,6 @@ class FormStore {
             return false;
           }
         }
-
         store.options.log(`[${store.options.name}] Saving data...`);
         store.options.log(updates);
         store.isSaving = true;
