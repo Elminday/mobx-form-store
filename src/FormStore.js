@@ -74,6 +74,8 @@ async function processSaveResponse(store, updates, response) {
     if (response.data) {
       Object.assign(store.dataServer, response.data);
       Object.assign(store.data, response.data);
+      console.log(response.data);
+      console.log(store.data);
     }
 
     store.dataChanges.forEach((value, key) => {
@@ -434,10 +436,14 @@ class FormStore {
             tempUpdates[key] = value;
           }
           updates = tempUpdates;
+          
           if (Object.keys(updates).length === 0) {
             store.options.log(`[${store.options.name}] No changes to save.`);
             return false;
           }
+
+          updates = Object.assign(...Object.entries(updates).map(d => ({ [d[0]]: d[1] })));
+
 
           // check if we have property currently being edited in changes
           // or if a property has an error
